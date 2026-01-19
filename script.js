@@ -6,7 +6,8 @@ const hobbies = [
     { name: '다이어리 꾸미기', icon: '📔', color: '#FFA07A', count: 150 },
     { name: '헬스', icon: '💪', color: '#98D8C8', count: 220 },
     { name: '요가', icon: '🧘', color: '#F7DC6F', count: 130 },
-    { name: '수영', icon: '🏊', color: '#BB8FCE', count: 80 }
+    { name: '수영', icon: '🏊', color: '#BB8FCE', count: 80 },
+    { name: '자격증 취득', icon: '📜', color: '#F1C40F', count: 110 }
 ];
 
 const totalMembers = hobbies.reduce((sum, hobby) => sum + hobby.count, 0);
@@ -252,6 +253,31 @@ function createTabs() {
 function createTabContent(hobby) {
     const percentage = ((hobby.count / totalMembers) * 100).toFixed(1);
 
+    // Image gallery for Knitting tab
+    let galleryHtml = '';
+    if (hobby.name === '뜨개질') {
+        galleryHtml = `
+            <div class="gallery-section">
+                <h3 class="gallery-title">🧶 뜨개질 작품 갤러리</h3>
+                <div class="gallery-grid">
+                    <div class="gallery-item">
+                        <img src="images/knitting_1.jpg" alt="작품1" onerror="this.onerror=null; this.parentElement.innerHTML='<span style=\'font-size:2rem\'>🧶</span>';">
+                    </div>
+                    <div class="gallery-item">
+                        <img src="images/knitting_2.jpg" alt="작품2" onerror="this.onerror=null; this.parentElement.innerHTML='<span style=\'font-size:2rem\'>🧶</span>';">
+                    </div>
+                    <div class="gallery-item">
+                        <img src="images/knitting_3.jpg" alt="작품3" onerror="this.onerror=null; this.parentElement.innerHTML='<span style=\'font-size:2rem\'>🧶</span>';">
+                    </div>
+                    <div class="gallery-item">
+                        <img src="images/knitting_4.jpg" alt="작품4" onerror="this.onerror=null; this.parentElement.innerHTML='<span style=\'font-size:2rem\'>🧶</span>';">
+                    </div>
+                </div>
+                <p class="gallery-note">💡 images 폴더에 knitting_1.jpg ~ 4.jpg 사진을 넣으면 여기에 표시됩니다.</p>
+            </div>
+        `;
+    }
+
     return `
         <div class="community-header" style="border-color: ${hobby.color}40">
             <div class="community-title" style="color: ${hobby.color}">
@@ -260,6 +286,7 @@ function createTabContent(hobby) {
             <div class="community-description">
                 ${hobby.count.toLocaleString()}명 (${percentage}%)의 회원이 ${hobby.name}을(를) 즐기고 있습니다
             </div>
+            ${galleryHtml}
         </div>
         
         <div class="comments-section">
