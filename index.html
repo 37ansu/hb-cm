@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="8가지 취미를 가진 사람들의 소통 공간 - 뜨개질, 독서, 요리 등 다양한 취미를 공유하세요.">
+    <meta property="og:title" content="취미 커뮤니티">
+    <meta property="og:description" content="8가지 취미, 하나의 커뮤니티. 당신의 취미를 공유해보세요!">
+    <title>취미 커뮤니티</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap"
+        rel="stylesheet">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="styles.css">
+
+    <style>
+        /* 추가 스타일 보정 */
+        .hero-community {
+            padding-top: 4rem;
+            padding-bottom: 4rem;
+            min-height: auto;
+        }
+
+        .hero-title-large {
+            font-size: 3.5rem;
+            font-weight: 900;
+            text-align: center;
+            margin-bottom: 1rem;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-desc {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            margin-bottom: 3rem;
+        }
+
+        .bottom-stats-section {
+            padding: 2rem 0;
+            background: rgba(255, 255, 255, 0.5);
+            border-top: 1px solid var(--border-color);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <h1 class="logo">🎨 취미 커뮤니티</h1>
+                <nav class="nav">
+                    <a href="signup.html" class="nav-link" style="color: #FF6B6B">회원가입</a>
+                    <a href="#stats" class="nav-link">통계</a>
+                    <a href="#community" class="nav-link">커뮤니티</a>
+                    <a href="#attendance" class="nav-link">출석부</a>
+                    <a href="#info" class="nav-link">정보</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- 1. Statistics Charts (Top Section) -->
+    <section id="stats" class="stats-section" style="padding-top: 8rem;">
+        <div class="container">
+            <h2 class="section-title">📊 취미별 통계</h2>
+            <p class="section-subtitle">우리 커뮤니티 회원들의 취미 분포를 확인해보세요</p>
+
+            <div class="charts-grid">
+                <div class="chart-container glass-card">
+                    <h3 class="chart-title">취미별 인원 분포</h3>
+                    <canvas id="barChart"></canvas>
+                </div>
+                <div class="chart-container glass-card">
+                    <h3 class="chart-title">비율 분석</h3>
+                    <canvas id="pieChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Hobby Cards Grid -->
+            <div class="hobby-cards-grid" id="hobby-cards">
+                <!-- Javascript will populate this -->
+            </div>
+        </div>
+    </section>
+
+    <!-- 2. Community Section -->
+    <section id="community" class="hero-community">
+        <div class="container">
+            <h2 class="hero-title-large">당신의 취미를 공유하세요</h2>
+            <p class="hero-desc">8가지 취미, 하나의 커뮤니티. 지금 바로 대화에 참여해보세요!</p>
+
+            <!-- Hobby Tabs -->
+            <div class="tabs-container">
+                <div class="tabs" id="hobby-tabs">
+                    <!-- Javascript will populate this -->
+                </div>
+            </div>
+
+            <!-- Tab Content -->
+            <div class="tab-content-container">
+                <div id="tab-content">
+                    <!-- Javascript will populate this -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. Attendance Section -->
+    <section id="attendance" class="attendance-section glass-card"
+        style="margin: 2rem auto; max-width: 1200px; border-radius: 0;">
+        <div class="container">
+            <h2 class="section-title">📝 출석부</h2>
+            <p class="section-subtitle">오늘도 방문해주셔서 감사합니다! 출석 체크하고 가세요</p>
+
+            <div class="attendance-container" style="box-shadow: none; border: none; background: transparent;">
+                <div class="attendance-form-wrapper">
+                    <form class="attendance-form" id="attendance-form">
+                        <div class="form-row">
+                            <input type="text" class="form-input" id="attendance-name" placeholder="이름을 입력하세요" required
+                                autocomplete="off">
+                            <button type="submit" class="submit-button">
+                                ✓ 출석 체크
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="attendance-stats">
+                    <div class="attendance-stat-item">
+                        <span class="attendance-stat-label">오늘 출석</span>
+                        <span class="attendance-stat-number" id="today-attendance">0</span>
+                    </div>
+                    <div class="attendance-stat-item">
+                        <span class="attendance-stat-label">전체 출석</span>
+                        <span class="attendance-stat-number" id="total-attendance">0</span>
+                    </div>
+                </div>
+
+                <div class="attendance-list" id="attendance-list">
+                    <!-- Javascript will populate this -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. Community Info (Bottom Stats) -->
+    <section id="info" class="bottom-stats-section">
+        <div class="container">
+            <!-- 한 줄 정렬 및 아이콘/글씨 축소 스타일은 styles.css .bottom-stats-section 관련 클래스에 적용됨 -->
+            <div class="hero-stats" style="margin-top: 0;">
+                <div class="stat-card">
+                    <div class="stat-number" id="total-members">1,000</div>
+                    <div class="stat-label">총 회원</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">8</div>
+                    <div class="stat-label">취미 카테고리</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="total-posts">0</div>
+                    <div class="stat-label">총 게시글</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="visitor-count">0</div>
+                    <div class="stat-label">👀 방문자 수</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about-section">
+        <div class="container">
+            <div class="about-content glass-card">
+                <h2 class="section-title">소개</h2>
+                <div class="features-grid">
+                    <div class="feature-item">
+                        <div class="feature-icon">✨</div>
+                        <h3>Glassmorphism</h3>
+                        <p>최신 트렌드를 반영한 디자인</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">📱</div>
+                        <h3>반응형 웹</h3>
+                        <p>모든 디바이스 지원</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">🚀</div>
+                        <h3>인터랙티브</h3>
+                        <p>생동감 있는 사용자 경험</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 Hobby Community. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="script.js"></script>
+</body>
+
+</html>
