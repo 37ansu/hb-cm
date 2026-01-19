@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="7가지 취미를 가진 사람들의 통계와 소통 공간">
-    <title>취미 커뮤니티 - 통계 & 소통</title>
+    <meta name="description" content="8가지 취미를 가진 사람들의 소통 공간">
+    <title>취미 커뮤니티</title>
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -18,6 +18,40 @@
 
     <!-- CSS -->
     <link rel="stylesheet" href="styles.css">
+
+    <style>
+        /* 메인 커뮤니티 섹션 스타일 조정 */
+        .hero-community {
+            padding-top: 4rem;
+            padding-bottom: 4rem;
+            min-height: auto;
+        }
+
+        .hero-title-large {
+            font-size: 3.5rem;
+            font-weight: 900;
+            text-align: center;
+            margin-bottom: 1rem;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-desc {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            margin-bottom: 3rem;
+        }
+
+        /* 하단 통계 섹션 스타일 */
+        .bottom-stats-section {
+            padding: 4rem 0;
+            background: rgba(255, 255, 255, 0.5);
+            border-top: 1px solid var(--border-color);
+        }
+    </style>
 </head>
 
 <body>
@@ -28,51 +62,69 @@
                 <h1 class="logo">🎨 취미 커뮤니티</h1>
                 <nav class="nav">
                     <a href="signup.html" class="nav-link" style="color: #FF6B6B">회원가입</a>
-                    <a href="#attendance" class="nav-link">출석부</a>
                     <a href="#stats" class="nav-link">통계</a>
                     <a href="#community" class="nav-link">커뮤니티</a>
-                    <a href="#about" class="nav-link">소개</a>
+                    <a href="#attendance" class="nav-link">출석부</a>
+                    <a href="#info" class="nav-link">정보</a>
                 </nav>
             </div>
         </div>
     </header>
 
-    <!-- Hero Section -->
-    <section class="hero">
+    <!-- 1. Statistics Charts (Moved to Top) -->
+    <section id="stats" class="stats-section" style="padding-top: 8rem;">
         <div class="container">
-            <div class="hero-content">
-                <h2 class="hero-title">당신의 취미를 공유하세요</h2>
-                <p class="hero-subtitle">7가지 취미를 가진 사람들이 모여 통계를 만들고 소통하는 공간입니다.</p>
+            <h2 class="section-title">📊 취미별 통계</h2>
+            <p class="section-subtitle">우리 커뮤니티 회원들의 취미 분포를 확인해보세요</p>
 
-                <div class="hero-stats">
-                    <div class="stat-card">
-                        <div class="stat-number" id="total-members">1,000</div>
-                        <div class="stat-label">총 회원</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number">7</div>
-                        <div class="stat-label">취미 카테고리</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number" id="total-posts">0</div>
-                        <div class="stat-label">총 게시글</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number" id="visitor-count">0</div>
-                        <div class="stat-label">👀 방문자 수</div>
-                    </div>
+            <div class="charts-grid">
+                <div class="chart-container glass-card">
+                    <h3 class="chart-title">취미별 인원 분포</h3>
+                    <canvas id="barChart"></canvas>
+                </div>
+                <div class="chart-container glass-card">
+                    <h3 class="chart-title">비율 분석</h3>
+                    <canvas id="pieChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Hobby Cards Grid -->
+            <div class="hobby-cards-grid" id="hobby-cards">
+                <!-- Javascript will populate this -->
+            </div>
+        </div>
+    </section>
+
+    <!-- 2. MAIN HERO: Community Section -->
+    <section id="community" class="hero-community">
+        <div class="container">
+            <h2 class="hero-title-large">당신의 취미를 공유하세요</h2>
+            <p class="hero-desc">8가지 취미, 하나의 커뮤니티. 지금 바로 대화에 참여해보세요!</p>
+
+            <!-- Hobby Tabs -->
+            <div class="tabs-container">
+                <div class="tabs" id="hobby-tabs">
+                    <!-- Javascript will populate this -->
+                </div>
+            </div>
+
+            <!-- Tab Content -->
+            <div class="tab-content-container">
+                <div id="tab-content">
+                    <!-- Javascript will populate this -->
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Attendance Section -->
-    <section id="attendance" class="attendance-section">
+    <!-- 3. Attendance Section -->
+    <section id="attendance" class="attendance-section glass-card"
+        style="margin: 2rem auto; max-width: 1200px; border-radius: 0;">
         <div class="container">
             <h2 class="section-title">📝 출석부</h2>
             <p class="section-subtitle">오늘도 방문해주셔서 감사합니다! 출석 체크하고 가세요</p>
 
-            <div class="attendance-container glass-card">
+            <div class="attendance-container" style="box-shadow: none; border: none; background: transparent;">
                 <div class="attendance-form-wrapper">
                     <form class="attendance-form" id="attendance-form">
                         <div class="form-row">
@@ -103,47 +155,26 @@
         </div>
     </section>
 
-    <!-- Statistics Dashboard -->
-    <section id="stats" class="stats-section">
+    <!-- 4. BOTTOM INFO: Stats Overview -->
+    <section id="info" class="bottom-stats-section">
         <div class="container">
-            <h2 class="section-title">📊 취미별 통계</h2>
-            <p class="section-subtitle">우리 커뮤니티 회원들의 취미 분포를 확인해보세요</p>
-
-            <div class="charts-grid">
-                <div class="chart-container glass-card">
-                    <h3 class="chart-title">취미별 인원 분포</h3>
-                    <canvas id="barChart"></canvas>
+            <h2 class="section-title" style="font-size: 1.8rem; margin-bottom: 2rem;">커뮤니티 현황</h2>
+            <div class="hero-stats" style="margin-top: 0;">
+                <div class="stat-card">
+                    <div class="stat-number" id="total-members">1,000</div>
+                    <div class="stat-label">총 회원</div>
                 </div>
-                <div class="chart-container glass-card">
-                    <h3 class="chart-title">비율 분석</h3>
-                    <canvas id="pieChart"></canvas>
+                <div class="stat-card">
+                    <div class="stat-number">8</div>
+                    <div class="stat-label">취미 카테고리</div>
                 </div>
-            </div>
-
-            <!-- Hobby Cards Grid -->
-            <div class="hobby-cards-grid" id="hobby-cards">
-                <!-- Javascript will populate this -->
-            </div>
-        </div>
-    </section>
-
-    <!-- Community Section -->
-    <section id="community" class="community-section">
-        <div class="container">
-            <h2 class="section-title">💬 커뮤니티</h2>
-            <p class="section-subtitle">같은 취미를 가진 사람들과 이야기를 나눠보세요</p>
-
-            <!-- Hobby Tabs -->
-            <div class="tabs-container">
-                <div class="tabs" id="hobby-tabs">
-                    <!-- Javascript will populate this -->
+                <div class="stat-card">
+                    <div class="stat-number" id="total-posts">0</div>
+                    <div class="stat-label">총 게시글</div>
                 </div>
-            </div>
-
-            <!-- Tab Content -->
-            <div class="tab-content-container">
-                <div id="tab-content">
-                    <!-- Javascript will populate this -->
+                <div class="stat-card">
+                    <div class="stat-number" id="visitor-count">0</div>
+                    <div class="stat-label">👀 방문자 수</div>
                 </div>
             </div>
         </div>
@@ -154,11 +185,6 @@
         <div class="container">
             <div class="about-content glass-card">
                 <h2 class="section-title">소개</h2>
-                <p class="about-text">
-                    이 웹사이트는 대학원 과제 프로젝트의 일환으로 제작되었습니다.
-                    HTML, CSS(Vanilla), JavaScript(Vanilla)를 사용하여 구축되었으며,
-                    Chart.js를 통한 데이터 시각화와 LocalStorage를 활용한 데이터 관리를 특징으로 합니다.
-                </p>
                 <div class="features-grid">
                     <div class="feature-item">
                         <div class="feature-icon">✨</div>
@@ -171,7 +197,7 @@
                         <p>모든 디바이스 지원</p>
                     </div>
                     <div class="feature-item">
-                        <div class="feature-icon">�</div>
+                        <div class="feature-icon">🚀</div>
                         <h3>인터랙티브</h3>
                         <p>생동감 있는 사용자 경험</p>
                     </div>

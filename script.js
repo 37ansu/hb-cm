@@ -256,24 +256,68 @@ function createTabContent(hobby) {
     // Image gallery for Knitting tab
     let galleryHtml = '';
     if (hobby.name === '뜨개질') {
-        galleryHtml = `
-            <div class="gallery-section">
-                <h3 class="gallery-title">🧶 뜨개질 작품 갤러리</h3>
-                <div class="gallery-grid">
-                    <div class="gallery-item">
-                        <img src="images/knitting_1.jpg" alt="작품1" onerror="this.onerror=null; this.parentElement.innerHTML='<span style=\'font-size:2rem\'>🧶</span>';">
-                    </div>
-                    <div class="gallery-item">
-                        <img src="images/knitting_2.jpg" alt="작품2" onerror="this.onerror=null; this.parentElement.innerHTML='<span style=\'font-size:2rem\'>🧶</span>';">
-                    </div>
-                    <div class="gallery-item">
-                        <img src="images/knitting_3.jpg" alt="작품3" onerror="this.onerror=null; this.parentElement.innerHTML='<span style=\'font-size:2rem\'>🧶</span>';">
-                    </div>
-                    <div class="gallery-item">
-                        <img src="images/knitting_4.jpg" alt="작품4" onerror="this.onerror=null; this.parentElement.innerHTML='<span style=\'font-size:2rem\'>🧶</span>';">
+        let imagesHtml = '';
+        // Try to load up to 20 images
+        for (let i = 1; i <= 20; i++) {
+            // Flexible loading: supports 'image 1.png', 'image 1.jpg', 'image1.png', 'image1.jpg'
+            imagesHtml += `
+                <div class="gallery-item" style="display: none;" id="gallery-item-${i}" onclick="openImageModal(${i})">
+                    <!-- PNG with space -->
+                    <img src="image/image ${i}.png" style="display:none"
+                         onload="this.style.display='block'; document.getElementById('gallery-item-${i}').style.display='flex'" 
+                         onerror="this.remove()">
+                         
+                    <!-- JPG with space -->
+                    <img src="image/image ${i}.jpg" style="display:none"
+                         onload="this.style.display='block'; document.getElementById('gallery-item-${i}').style.display='flex'" 
+                         onerror="this.remove()">
+
+                    <!-- PNG no space -->
+                    <img src="image/image${i}.png" style="display:none"
+                         onload="this.style.display='block'; document.getElementById('gallery-item-${i}').style.display='flex'" 
+                         onerror="this.remove()">
+                         
+                    <!-- JPG no space -->
+                    <img src="image/image${i}.jpg" style="display:none"
+                         onload="this.style.display='block'; document.getElementById('gallery-item-${i}').style.display='flex'" 
+                         onerror="this.remove()">
+                         
+                    <div class="gallery-overlay" style="position: absolute; inset:0; background:rgba(0,0,0,0.3); display:flex; align-items:center; justify-content:center; opacity:0; transition:0.3s; color:white; font-weight:bold; cursor:pointer;">
+                        💬 댓글 남기기
                     </div>
                 </div>
-                <p class="gallery-note">💡 images 폴더에 knitting_1.jpg ~ 4.jpg 사진을 넣으면 여기에 표시됩니다.</p>
+            `;
+        }
+
+        galleryHtml = `
+            <style>
+                .gallery-item { position: relative; }
+                .gallery-item:hover .gallery-overlay { opacity: 1 !important; }
+            </style>
+            <div class="gallery-section">
+                <h3 class="gallery-title">🧶 뜨개질 작품 갤러리</h3>
+                <p style="text-align: center; color: var(--text-secondary); margin-bottom: 1rem;">사진을 클릭하여 작품에 대해 이야기를 나눠보세요!</p>
+                <div class="gallery-grid">
+                    ${imagesHtml}
+                </div>
+                <div class="gallery-note" style="margin-top: 10px;">
+                    <p>💡 <b>사진 추가 방법</b></p>
+                    <p><code>h.w/image</code> 폴더에 <code>image 1.jpg</code>, <code>image 2.jpg</code> ... 와 같이 이름을 저장하면 자동으로 나타납니다. (띄어쓰기 주의)</p>
+                </div>
+                
+                <div class="video-link-wrapper">
+                    <a href="https://youtu.be/xa0nTVffjYs?si=JWkXfV0jOYXcxsqe" target="_blank" class="video-link-button">
+                        <span class="video-icon">🧶</span> 대바늘 기초 추천 영상
+                    </a>
+                    <a href="https://youtu.be/KkOPjZ06JmU?si=7q52zLrl_vfkzwBs" target="_blank" class="video-link-button" style="background: #FF6B6B;">
+                        <span class="video-icon">🧵</span> 코바늘 기초 추천 영상
+                    </a>
+                </div>
+                <div class="video-link-wrapper" style="margin-top: 1rem;">
+                    <a href="https://www.instagram.com/p/C_RvKPnPOkA/?img_index=1" target="_blank" class="video-link-button insta-link-button">
+                        <span class="video-icon">★</span> 이번 주 추천 도안 살펴보기
+                    </a>
+                </div>
             </div>
         `;
     }
@@ -579,5 +623,186 @@ document.querySelectorAll('.nav-link').forEach(link => {
         if (targetElement) {
             targetElement.scrollIntoView({ behavior: 'smooth' });
         }
+
     });
 });
+
+// ===== Image Modal Logic =====
+
+let currentImageId = null;
+
+function openImageModal(index) {
+    const modal = document.getElementById('image-modal') || createImageModal();
+    const modalImg = document.getElementById('modal-image');
+    const modalTitle = document.getElementById('modal-title');
+
+    // Find the visible image source from the gallery item
+    const galleryItem = document.getElementById(`gallery-item-${index}`);
+    const visibleImg = galleryItem.querySelector('img[style*="block"]');
+
+    if (visibleImg) {
+        modalImg.src = visibleImg.src;
+        modalTitle.textContent = `뜨개질 작품 #${index}`;
+        currentImageId = `image_${index}`;
+
+        modal.style.display = 'block';
+        setTimeout(() => modal.classList.add('show'), 10);
+
+        loadImageComments(currentImageId);
+    }
+}
+
+function closeImageModal() {
+    const modal = document.getElementById('image-modal');
+    if (modal) {
+        modal.classList.remove('show');
+        setTimeout(() => modal.style.display = 'none', 300);
+    }
+}
+
+function createImageModal() {
+    const modalHtml = `
+        <div id="image-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-image-container">
+                    <img id="modal-image" src="" alt="Zoomed Image">
+                    <button class="like-button-overlay" onclick="toggleImageLike()">
+                        <span class="heart-icon">🤍</span> <span id="like-count">0</span>
+                    </button>
+                </div>
+                <div class="modal-sidebar">
+                    <div class="modal-header">
+                        <h3 class="modal-title" id="modal-title">작품 제목</h3>
+                        <button class="close-modal" onclick="closeImageModal()">&times;</button>
+                    </div>
+                    <div class="modal-comments" id="modal-comments-list">
+                        <!-- Comments go here -->
+                    </div>
+                    <div class="modal-footer">
+                        <form class="comment-form" onsubmit="event.preventDefault(); handleImageCommentSubmit();">
+                            <div class="form-group">
+                                <input type="text" class="form-input" id="modal-comment-name" placeholder="이름" required style="margin-bottom: 0.5rem">
+                                <textarea class="form-textarea" id="modal-comment-text" placeholder="작품에 대해 이야기해보세요..." required style="min-height: 80px"></textarea>
+                            </div>
+                            <button type="submit" class="submit-button" style="width: 100%; margin-top: 0.5rem">댓글 남기기</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    document.body.insertAdjacentHTML('beforeend', modalHtml);
+
+    // Close on click outside
+    document.getElementById('image-modal').addEventListener('click', (e) => {
+        if (e.target.id === 'image-modal') closeImageModal();
+    });
+
+    return document.getElementById('image-modal');
+}
+
+function loadImageComments(imgId) {
+    // Load Comments
+    const allComments = JSON.parse(localStorage.getItem('galleryComments') || '{}');
+    const comments = allComments[imgId] || [];
+    const container = document.getElementById('modal-comments-list');
+
+    if (comments.length === 0) {
+        container.innerHTML = '<div class="no-comments">이 작품에 대한 첫 번째 코멘트를 남겨보세요! ✨</div>';
+    } else {
+        container.innerHTML = comments.map(c => `
+            <div class="comment-item">
+                <div class="comment-header">
+                    <span class="comment-author">${escapeHtml(c.author)}</span>
+                    <span class="comment-date">${new Date(c.date).toLocaleDateString()}</span>
+                </div>
+                <div class="comment-text">${escapeHtml(c.text)}</div>
+            </div>
+        `).join('');
+    }
+
+    // Load Likes
+    const allLikes = JSON.parse(localStorage.getItem('galleryLikes') || '{}');
+    const likeCount = allLikes[imgId] || 0;
+
+    const myLikes = JSON.parse(localStorage.getItem('myLikedImages') || '[]');
+    const isLiked = myLikes.includes(imgId);
+
+    updateLikeUI(likeCount, isLiked);
+}
+
+function updateLikeUI(count, isLiked) {
+    const heartIcon = document.querySelector('.heart-icon');
+    const likeCountSpan = document.getElementById('like-count');
+    const likeButton = document.querySelector('.like-button-overlay');
+
+    if (heartIcon && likeCountSpan) {
+        heartIcon.textContent = isLiked ? '❤️' : '🤍';
+        likeCountSpan.textContent = count;
+
+        if (isLiked) {
+            likeButton.classList.add('liked');
+        } else {
+            likeButton.classList.remove('liked');
+        }
+    }
+}
+
+function toggleImageLike() {
+    if (!currentImageId) return;
+
+    const allLikes = JSON.parse(localStorage.getItem('galleryLikes') || '{}');
+    let currentCount = allLikes[currentImageId] || 0;
+
+    const myLikes = JSON.parse(localStorage.getItem('myLikedImages') || '[]');
+    const index = myLikes.indexOf(currentImageId);
+    const isLiked = index !== -1;
+
+    if (isLiked) {
+        // Unlike
+        currentCount = Math.max(0, currentCount - 1);
+        myLikes.splice(index, 1);
+    } else {
+        // Like
+        currentCount++;
+        myLikes.push(currentImageId);
+    }
+
+    allLikes[currentImageId] = currentCount;
+
+    localStorage.setItem('galleryLikes', JSON.stringify(allLikes));
+    localStorage.setItem('myLikedImages', JSON.stringify(myLikes));
+
+    updateLikeUI(currentCount, !isLiked);
+
+    // Add animation effect
+    const btn = document.querySelector('.like-button-overlay');
+    btn.classList.add('pulse');
+    setTimeout(() => btn.classList.remove('pulse'), 300);
+}
+
+function handleImageCommentSubmit() {
+    const nameInput = document.getElementById('modal-comment-name');
+    const textInput = document.getElementById('modal-comment-text');
+
+    const name = nameInput.value.trim();
+    const text = textInput.value.trim();
+
+    if (!name || !text || !currentImageId) return;
+
+    const allComments = JSON.parse(localStorage.getItem('galleryComments') || '{}');
+    if (!allComments[currentImageId]) allComments[currentImageId] = [];
+
+    allComments[currentImageId].unshift({
+        author: name,
+        text: text,
+        date: new Date().toISOString()
+    });
+
+    localStorage.setItem('galleryComments', JSON.stringify(allComments));
+
+    nameInput.value = '';
+    textInput.value = '';
+
+    loadImageComments(currentImageId);
+}
